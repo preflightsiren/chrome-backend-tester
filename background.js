@@ -1,7 +1,7 @@
 var hostName = '';
 var hostHeader = '';
 
-chrome.storage.onChanged.addListener( function syncConfig() {
+var syncConfig = function() {
   chrome.storage.sync.get({
       hostName: '',
       hostHeader: ''
@@ -12,15 +12,19 @@ chrome.storage.onChanged.addListener( function syncConfig() {
       hostHeader = items.hostHeader;
       console.log("setting Host to", hostHeader)
     });
-})
+}
+
+chrome.storage.onChanged.addListener( syncConfig );
+// retrieve any settings from the chrome storage api on startup.
+syncConfig();
 
 chrome.webRequest.onBeforeSendHeaders.addListener(
   function filterRequest(details) {
-    console.log("hostName is %s, length of %d", hostName, hostName.length)
     // if no hostName is given
     // or the url does not contain the hostname
     // stop processing
-    if ((hostName.length == 0) || (details.url.indexOf(hostName) <= -1)) {
+    var url = "://".concat(hostName)
+    if ((hostName.length == 0) || (details.url.indexOf(url) <= -1)) {
       return;
     }
     console.log("Redirecting %s to %s", details.url, hostHeader)
