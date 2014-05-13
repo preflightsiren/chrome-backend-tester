@@ -1,7 +1,7 @@
 // Saves options to chrome.storage
 function save_options() {
   var hostName = document.getElementById('hostName').value;
-  var hostHeader = document.getElementById('hostHeader').checked;
+  var hostHeader = document.getElementById('hostHeader').value;
   chrome.storage.sync.set({
     hostName: hostName,
     hostHeader: hostHeader
@@ -24,7 +24,7 @@ function restore_options() {
     hostHeader: ''
   }, function(items) {
     document.getElementById('hostName').value = items.hostName;
-    document.getElementById('hostHeader').checked = items.hostHeader;
+    document.getElementById('hostHeader').value = items.hostHeader;
   });
 }
 document.addEventListener('DOMContentLoaded', restore_options);
